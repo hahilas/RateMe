@@ -181,6 +181,8 @@ def search_student():
 		return 'Email must be typed in a string format.'
 	else:
 		searched_student = Student.query.filter_by(email=email).first()
+		if searched_student is None:
+			return 'The student you searched does not exist in the RateMe system.'
 		return jsonify ([searched_student.serialize()])
 
 # your code ends here 
