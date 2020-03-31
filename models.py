@@ -38,6 +38,15 @@ class Student(db.Model):
         return '<{} {} {} {} {}>'.format(self.id, self.email, self.fullname, self.courses,self.skills)
 
 
+    def serialize(self):
+        return {
+            'id':self.id,
+            'email':self.email,
+            'fullname':self.fullname,
+            'courses':self.courses,
+            'skills':self.skills,
+            'rating':self.rating
+        }
 class Course(db.Model):
     __tablename__='course_table'
 
