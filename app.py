@@ -18,6 +18,7 @@ from models import Student, Course, Skill, Rating
 
 # Step 05: add routes and their binded functions here
 
+#Filling up the student table
 @app.route('/PostStudentDetail/', methods=['POST']) 
 def create_student():
 
@@ -40,8 +41,11 @@ def create_student():
 			db.session.add(new_entry)
 			db.session.commit()
 		
+		#check if each of the courses they took is valid
 		for i in courses:
 			valid_course = Course.query.filter_by(course_code=i).first()
+			if valid_course is None:
+				return "Please only input valid course codes"
 			new_entry.courses.append(valid_course)
 			db.session.commit()
 		
@@ -50,6 +54,7 @@ def create_student():
 	except Exception as e:
 		return(str(e))
 
+#Filling up the course table
 @app.route('/PostCourseDetail/', methods=['POST']) 
 def create_course():
 
