@@ -14,19 +14,19 @@ email_list = [] #fill list of email addresses to search
 
 def test_createstudent(email,fullname,courses):
     json = {'email':email,'fullname':fullname, 'courses':courses}
-    r = requests.post(create_url, json=json)
+    r = requests.post(createstudent_url, json=json)
     print(r.status_code)
     print(r.text)
 
 def test_createcourse(course_code,course_name):
     json = {'course_code':course_code,'course_name':course_name}
-    r=requests.post(create2_url, json=json)
+    r=requests.post(createcourse_url, json=json)
     print(r.status_code)
     print(r.text)
 
 def test_createskill(skill_name,skill_type):
     json = {'skill_name':skill_name, 'skill_type':skill_type}
-    r = requests.post(create3_url, json=json)
+    r = requests.post(createskill_url, json=json)
     print(r.status_code)
     print(r.text)
 
