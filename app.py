@@ -18,10 +18,11 @@ from models import Student, Course, Skill, Rating
 
 # Step 05: add routes and their binded functions here
 
-#Filling up the student table
+#Filling up the student table - must fill up email, fullname, and list of courses.
 @app.route('/PostStudentDetail/', methods=['POST']) 
 def create_student():
-
+	#need to check if the request.json has email, fullname and courses
+	#and make sure they have the correct data types
 	try:
 		if 'email' not in request.json or 'fullname' not in request.json or 'courses' not in request.json:
 			return("email,fullname and courses must be included in the request")
@@ -55,6 +56,7 @@ def create_student():
 		return(str(e))
 
 #Filling up the course table
+#add new courses/names when they do not already exist in the table
 @app.route('/PostCourseDetail/', methods=['POST']) 
 def create_course():
 
@@ -81,7 +83,9 @@ def create_course():
 	
 	except Exception as e:
 		return(str(e))
-	
+
+#updating the skill table with all the skills
+#add skills only if they dont exist in the skill table	
 @app.route('/PostSkillDetail/', methods=['POST']) 
 def create_skill():
 
@@ -113,6 +117,7 @@ def create_skill():
 	except Exception as e:
 		return(str(e))
 
+#skills refers to a list of skills
 @app.route('/PostStudentRating/', methods=['POST']) 
 def create_rating():
 
@@ -127,7 +132,7 @@ def create_rating():
 			if valid_skill is None:
 				return("Skill does not exist in our database")
 
-		valid_ratee = Student.query.filter_by(email=ratee_email).first()
+		valid_ratee = Student.query.filter_by(email=ratee_email).first()   #this is an object
 		valid_rater = Student.query.filter_by(email=rater_email).first()
 
 		if valid_ratee is None or valid_rater is None:
@@ -135,7 +140,8 @@ def create_rating():
 		else:
 			check1 = False
 			check2 = False
-
+			#list of courses in the student's profile is in the form of course codes
+			#checking if bothe rater and ratee has taken the course
 			for i in valid_ratee.courses:
 				if i.course_code == course_code:
 					check1 = True
@@ -153,6 +159,9 @@ def create_rating():
 					db.session.add(new_entry)
 					db.session.commit()
 
+					# Refer to candidature_skill associative table 
+					# For each student, there can only be unique skills under the skill_id column
+					# eg. Shouldn't be adding more than 1 'leadership' for a person called 'John'
 					if i not in valid_ratee.skills:
 						valid_ratee.skills.append(skill)
 						db.session.commit()
@@ -163,6 +172,16 @@ def create_rating():
 	
 	except Exception as e:
 		return(str(e))
+
+@app.route('/GetSearchStudent/', methods=['POST']) 
+def search_student():
+	if 'email' not in request.args:
+		return 'Email of the student must be included in the request'
+	elif type(request.args['email']) != str:
+		return 'Email must be typed in a string format.'
+	else:
+		searched_student = Student.query.filter_by(email=email).first()
+		return jsonify ([searched_student.serialize()])
 
 # your code ends here 
 
