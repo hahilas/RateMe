@@ -173,7 +173,7 @@ def create_rating():
 	except Exception as e:
 		return(str(e))
 
-@app.route('/GetSearchStudent/', methods=['POST']) 
+@app.route('/GetSearchStudent/', methods=['GET']) 
 def search_student():
 	if 'email' not in request.args:
 		return 'Email of the student must be included in the request'
