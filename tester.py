@@ -2,10 +2,10 @@ import requests
 #import json
 
 base_url = 'http://127.0.0.1:5000/'
-createstudent_url = base_url + 'PostStudentDetail/'
-createcourse_url = base_url + 'PostCourseDetail/'
-createskill_url = base_url + 'PostSkillDetail/'
-readstudent_url = base_url + 'GetSearchStudent/'
+createstudent_url = base_url + 'student/'
+createcourse_url = base_url + 'course/'
+createskill_url = base_url + 'skill/'
+updatestudentcourse_url = base_url + 'studentcourse/'
 
 stud_list = [] #fill in these with nested list of student details in the format (email,fullname,courses)
 course_list = [] #fill in these with nested list of course_details in the format (course_code, course_name)
@@ -30,13 +30,27 @@ def test_createskill(skill_name,skill_type):
     print(r.status_code)
     print(r.text)
 
+def test_updatestudent(email, course_codes):
+    json = {'email':email, 'course_codes':course_codes}
+    r = requests.put(updatestudentcourse_url, json=json)
+    print(r.status_code)
+    print(r.text)
+
+
 def test_readstudent(email):
     params = {'email': email}
     r = requests.get(readstudent_url, params=params).json()
     print(r.status_code)
     print(r.text)
 
-test_createstudent("abc123@gmail.com","abc123",["smt123","smt121","smt122"])
+#test_createstudent("siti@gmail.com","abc123",["SMT202"])
+
+#test_createskill("Hardworking","Soft Skills")
+
+#test_createcourse("SMT2O1","Geographic Info System for Urban Planning")
+
+test_updatestudent("siti@gmail.com",["SMT202"])
+
 # for i in stud_list:
 #     test_createstudent(i[0],i[1],[i[2]])
 
